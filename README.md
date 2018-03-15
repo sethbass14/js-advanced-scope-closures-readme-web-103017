@@ -94,7 +94,8 @@ function retailPriceMaker(manufacturePrice){
 const retailPriceForNine = retailPriceMaker(9)
 
 retailPriceForNine
-// ƒ (marketType){
+// changed the below from 'marketType' to 'marketMultiplier' 3.15.18
+// ƒ (marketMultiplier){
 //  return marketMultiplier * manufacturePrice;
 // }  
 ```
@@ -124,7 +125,8 @@ So just like we can return a function called `retailPriceForNine` and then see t
 
 ```js
 function retailPriceMaker(manufacturePrice){
-  return function(marketType){
+  //Changed marketType to marketMultiplier below 3.15.18
+  return function(marketMultiplier){
     return marketMultiplier * manufacturePrice;
   }
 }
@@ -151,14 +153,16 @@ So here, our returned functions provides some capability that JavaScript objects
 ```js
 
   class Item {
-    constructor(manufacturePrice, marketType){
+    //added name to constructor, took away 'marketType' from constructor 3.15.18
+    constructor(name, manufacturePrice){
       this.name = name
       this.manufacturePrice = manufacturePrice
     }
-    retailPrice(marketType){
-      let manufacturePrice;
+    retailPrice(){
+      // set manufacturePrice to this.manufacturePrice 3.15.18
+      let manufacturePrice = this.manufacturePrice
       return function(marketType){
-        return marketMultiplier * manufacturePrice;
+        return marketType * manufacturePrice;
       }
     }
   }
@@ -169,11 +173,14 @@ So here, our returned functions provides some capability that JavaScript objects
   // {name:  'tennis shoe', manufacturePrice: 4}
 ```
 
- But we our attributes can be made truly private when using a closure.  
+```js
+  //deleted 'we from text on line 176' 3.15.18
+```
+ But our attributes can be made truly private when using a closure.  
 
  ```js
  function retailPriceMaker(manufacturePrice){
-   return function(marketType){
+   return function(marketMultiplier){
      return marketMultiplier * manufacturePrice
    }
  }
@@ -190,13 +197,15 @@ Another use case for closures occurs when we declare our classes.  Because JavaS
 
 let ItemId = 0
 class Item {
-  constructor(manufacturePrice){
+  //added name to the constructor parameter 3.15.18
+  constructor(name, manufacturePrice){
     this.name = name
     this.manufacturePrice = manufacturePrice
     this.id = ++ItemId;
   }
-  retailPrice(marketType){
-    return marketMultiplier * manufacturePrice
+  //Added 'this.manufacturePrice' below. Changed 'marketType' to 'marketMultiplier' 3.15.18
+  retailPrice(marketMultiplier){
+    return marketMultiplier * this.manufacturePrice
   }
 }
 ```
@@ -208,15 +217,17 @@ As you see in the above code, we need to declare our `ItemId` variable outside o
 function createItem(){
   let ItemId = 0
   // return the class
+  // add name to the constructor 3.15.18
   return class {
-    constructor(manufacturePrice){
+    constructor(name, manufacturePrice){
       this.name = name
       this.manufacturePrice = manufacturePrice
       this.id = ++ItemId;
     }
 
-    retailPrice(marketType){
-      return marketMultiplier * manufacturePrice;
+    retailPrice(marketMultiplier){
+      //added 'this' below 3.15.18
+      return marketMultiplier * this.manufacturePrice;
     }
   }
 }
